@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>تحديث مركز العمليات للصحة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-gold-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-gold-16.png">
+  <link rel="apple-touch-icon" href="apple-touch-gold.png">
+  <!-- Alternate EMS favicon -->
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-ems-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-ems-16.png">
+  <link rel="apple-touch-icon" href="apple-touch-ems.png">
+
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.1.1/dist/tesseract.min.js"></script>
+
+  <!-- Favicons (EMS as default) -->
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <!-- Alternate (gold wreath) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-gold-32.png" title="gold">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-gold-16.png" title="gold">
+  <link rel="apple-touch-icon" href="apple-touch-gold.png" media="(prefers-color-scheme: light)">
+
+</head>
+<body>
+  <div id="intro">
+    <div class="beacons"><span class="beacon blue"></span><span class="beacon red"></span></div>
+    <div class="intro-logo"><img src="logo-left.png" alt="logo" /></div>
+    <div class="intro-title"><b>EMS</b> مستشفى ريسبكت</div>
+  </div>
+
+  <div id="copyToast">تم النسخ</div>
+
+  <header class="topbar">
+    <img class="badge left" src="logo-left.png" alt="EMS" />
+    <h1>تحديث مركز العمليات للصحة</h1>
+    <img class="badge right" src="logo-right.png" alt="EMS" />
+  </header>
+
+  <div class="sticky-actions">
+    <div class="actions">
+      <button id="clearBtn" class="btn danger">وضع تفريغ/ناتج</button>
+      <label class="btn violet" for="imgInput">رفع/لصق صورة</label>
+      <input id="imgInput" type="file" accept="image/*" hidden />
+    </div>
+    <div class="mode">
+      <label><input type="radio" name="mergeMode" value="replace" checked /> استبدال</label>
+      <label><input type="radio" name="mergeMode" value="merge" /> دمج</label>
+    </div>
+  </div>
+
+  <main class="container">
+    <section class="card">
+      <div class="card-head">
+        <div class="title">النتيجة النهائية</div>
+        <button id="copyBtn" class="btn slim">نسخ النتيجة</button>
+      </div>
+      <textarea id="resultBox" class="result" rows="10" spellcheck="false"></textarea>
+      <div class="hint small">المستلم يُحتسب ضمن العدد ولا يُعرض ضمن قائمة الميدان.</div>
+    </section>
+
+    <section class="card">
+      <div class="row two">
+        <div>
+          <div class="label">المستلم — <span class="muted">الاسم</span></div>
+          <input id="receiverName" class="input" placeholder="الاسم" />
+          <div class="label">— <span class="muted">الكود</span></div>
+          <input id="receiverCode" class="input" placeholder="الكود" />
+          <div id="receiverErr" class="err">يجب عليك كتابة الاسم مع كود</div>
+        </div>
+        <div>
+          <div class="label">النائب — <span class="muted">الاسم</span></div>
+          <input id="deputyName" class="input" placeholder="الاسم" />
+          <div class="label">— <span class="muted">الكود</span></div>
+          <input id="deputyCode" class="input" placeholder="الكود" />
+          <div id="deputyErr" class="err">يجب عليك كتابة الاسم مع كود</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div id="dropArea" class="drop ocr-overlay"><div class="ocr-glow" aria-hidden="true"></div><div id="ocrHud" class="ocr-progress" style="display:none">0%</div>اسحب وأفلت صورة هنا، أو الصقها بـ <b>Ctrl+V</b><div class="scanner" aria-hidden="true" style="display:none"></div><div class="dots" aria-hidden="true" style="display:none"><span></span><span></span><span></span></div></div>
+      <div class="hint small">يفضل رفع/لصق صورة عالية الجودة. أحيانًا ستحتاج لتعديل النتائج يدويًا قبل الإرسال.</div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div class="title">القائمة (ضبط/الاسم//الكود//الحالة//الموقع):</div>
+        <button id="addRowBtn" class="btn violet">إضافة سطر جديد</button>
+      </div>
+      <div id="rows"></div>
+    </section>
+  </main>
+
+  <div id="drawerBackdrop"></div>
+  <aside id="drawer">
+    <div class="drawer-head">
+      <div class="drawer-title">إضافة/تحرير سطر</div>
+      <button id="drawerClose" class="btn icon">&times;</button>
+    </div>
+
+    <div class="drawer-body">
+      <div id="members"></div>
+      <button id="addMember" class="btn violet block">➕ إضافة شخص</button>
+
+      <label class="drawer-label">الحالة</label>
+      <select id="dState" class="select">
+        <option>في الميدان</option>
+        <option>مشغول</option>
+        <option>مشغول - تدريب</option>
+        <option>مشغول - اختبار</option>
+        <option>خارج الخدمة</option>
+      </select>
+
+      <label class="drawer-label">الموقع</label>
+      <select id="dLoc" class="select">
+        <option>— لا شيء —</option>
+        <option>الغرب</option><option>الشرق</option><option>الشمال</option>
+        <option>الوسط</option><option>الجنوب</option><option>ساندي</option>
+        <option>بليتو</option>
+      </select>
+    </div>
+
+    <div class="drawer-foot">
+      <button id="drawerSave" class="btn violet block">تم</button>
+    </div>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>
