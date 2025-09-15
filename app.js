@@ -9,6 +9,18 @@ let editingIndex=null;let rows=[];
 
 const stateBadgeClass=s=>s==='في الميدان'?'state-midan':s==='مشغول'?'state-busy':s==='مشغول - تدريب'?'state-train':s==='مشغول - اختبار'?'state-test':s==='خارج الخدمة'?'state-off':'';
 window.addEventListener('load',()=>{});
+
+/* Intro kill */
+document.addEventListener('DOMContentLoaded', ()=>{
+  const intro = document.getElementById('intro');
+  if (!intro) return;
+  const kill = ()=>{ try{ intro.remove(); }catch(e){ intro.style.display='none'; } };
+  intro.addEventListener('animationend', kill, { once:true });
+  intro.addEventListener('click', kill);
+  window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') kill(); });
+  setTimeout(kill, 2800); // hard timeout
+});
+
 function showToast(){copyToast.style.opacity='1';setTimeout(()=>copyToast.style.opacity='0',1200)};copyBtn.addEventListener('click',()=>{navigator.clipboard.writeText(resultBox.value||'').then(showToast)});
 function checkNames(){const rOk=receiverName.value.trim()&&receiverCode.value.trim();const dOk=deputyName.value.trim()&&deputyCode.value.trim();receiverErr.style.display=rOk?'none':'block';deputyErr.style.display=dOk?'none':'block';return rOk&&dOk;}
 

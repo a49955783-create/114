@@ -1,7 +1,6 @@
 :root{--bg:#0f172a;--card:#0b1223;--muted:#a3a7b4;--text:#e5e7eb;--accent:#7c3aed;--accent2:#8b5cf6;--ok:#22c55e;--danger:#b91c1c;--line:#1f2937;--chip:#111827;}
 *{box-sizing:border-box}html,body{height:100%}body{margin:0;background:var(--bg);color:var(--text);font-family:"Cairo",system-ui,-apple-system,Segoe UI,Tahoma,Arial;}
-#intro{position:fixed;inset:0;z-index:9999;background:linear-gradient(180deg,#2c1b2f,#4b2334);display:flex;align-items:center;justify-content:center;flex-direction:column;animation:fadeOut .35s ease .45s forwards}
-.beacons{display:flex;gap:10px;margin-bottom:10px}.beacon{width:12px;height:12px;border-radius:50%}
+#intro{position:fixed;inset:0;z-index:9999;background:linear-gradient(180deg,#2c1b2f,#4b2334);display:flex;align-items:center;justify-content:center;flex-direction:column;animation: fadeOut .6s ease 2s forwards;gap:10px;margin-bottom:10px}.beacon{width:12px;height:12px;border-radius:50%}
 .beacon.blue{background:#3b82f6;box-shadow:0 0 16px 4px rgba(59,130,246,.7);animation:pulseB 1.1s infinite}
 .beacon.red{background:#ef4444;box-shadow:0 0 16px 4px rgba(239,68,68,.7);animation:pulseR 1.1s infinite .15s}
 @keyframes pulseB{50%{box-shadow:0 0 28px 10px rgba(59,130,246,.9)}}@keyframes pulseR{50%{box-shadow:0 0 28px 10px rgba(239,68,68,.9)}}
